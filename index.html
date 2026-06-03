@@ -953,7 +953,8 @@ document.getElementById("llForm").onsubmit = async (e) => {
       method: "POST",
       body: fd
     });
-
+  console.log("Matricula:", matricula);
+console.log("Senha:", senha);
     if (!r.ok) {
       throw await r.text();
     }
