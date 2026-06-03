@@ -228,6 +228,29 @@
 </head>
 
 <body>
+
+  <div id="loginScreen">
+  <div class="login-card">
+
+    <h2>Acesso Restrito</h2>
+
+    <input
+      id="loginUser"
+      placeholder="Usuário">
+
+    <input
+      id="loginPass"
+      type="password"
+      placeholder="Senha">
+
+    <button id="btnLogin">
+      Entrar
+    </button>
+
+    <div id="loginErro"></div>
+
+  </div>
+</div>
   <div id="overlayEnvio">
     <div class="box">
       <div class="spinner"></div>
@@ -482,6 +505,62 @@ const previewBox = document.getElementById("previewBox");
 
 let arquivosSelecionados = [];
 let tipoServicoSelecionado = "";
+
+  const LOGIN_URL =
+"https://withered-hat-347d.pedro-fillype.workers.dev/login";
+
+document
+.getElementById("btnLogin")
+.addEventListener("click", async () => {
+
+  const usuario =
+    document.getElementById("loginUser").value;
+
+  const senha =
+    document.getElementById("loginPass").value;
+
+  try {
+
+    const r = await fetch(LOGIN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        usuario,
+        senha
+      })
+    });
+
+    if (!r.ok) {
+      throw new Error();
+    }
+
+    const data = await r.json();
+
+    localStorage.setItem(
+      "token",
+      data.token
+    );
+
+    document
+      .getElementById("loginScreen")
+      .style.display = "none";
+
+    document
+      .getElementById("appContent")
+      .style.display = "block";
+
+  } catch {
+
+    document
+      .getElementById("loginErro")
+      .textContent =
+      "Usuário ou senha inválidos";
+
+  }
+
+});
 
 btnCamera.addEventListener("click", () => fileCamera.click());
 btnGaleria.addEventListener("click", () => fileGaleria.click());
